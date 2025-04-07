@@ -1,0 +1,77 @@
+# Dio-Desafio-Abstração-Kotlin
+Repositório Criado Para o Desafio De Projeto
+
+enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+
+data class Usuario(val nome: String)
+
+data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+
+data class Formacao(
+    val nome: String,
+    val nivel: Nivel,
+    var conteudos: List<ConteudoEducacional>
+) {
+
+    val inscritos = mutableListOf<Usuario>()
+
+    fun matricular(usuario: Usuario) {
+        // Verifica se o usuário já está matriculado
+        if (usuario in inscritos) {
+            println("${usuario.nome} já está matriculado nesta formação.")
+        } else {
+            inscritos.add(usuario)
+            println("${usuario.nome} foi matriculado com sucesso na formação $nome.")
+        }
+    }
+
+    // Exibe a lista de inscritos
+    fun listarInscritos() {
+        if (inscritos.isEmpty()) {
+            println("Nenhum aluno matriculado na formação $nome.")
+        } else {
+            println("Alunos matriculados na formação $nome:")
+            inscritos.forEach { println(it.nome) }
+        }
+    }
+
+    // Exibe todos os conteúdos educacionais da formação
+    fun listarConteudos() {
+        println("Conteúdos educacionais da formação $nome:")
+        conteudos.forEach { println("- ${it.nome}, Duração: ${it.duracao} minutos") }
+    }
+}
+
+fun main() {
+    // Criando alguns conteúdos educacionais
+    val conteudo1 = ConteudoEducacional("Kotlin Básico", 120)
+    val conteudo2 = ConteudoEducacional("Kotlin Avançado", 180)
+    val conteudo3 = ConteudoEducacional("Desenvolvimento de APIs com Kotlin", 150)
+
+    // Criando uma formação
+    val formacaoKotlin = Formacao(
+        nome = "Formação Kotlin para Desenvolvedores",
+        nivel = Nivel.INTERMEDIARIO,
+        conteudos = listOf(conteudo1, conteudo2, conteudo3)
+    )
+
+    // Criando usuários (alunos)
+    val aluno1 = Usuario(nome = "Maria")
+    val aluno2 = Usuario(nome = "João")
+    val aluno3 = Usuario(nome = "Pedro")
+
+    // Matriculando alunos
+    formacaoKotlin.matricular(aluno1)
+    formacaoKotlin.matricular(aluno2)
+    formacaoKotlin.matricular(aluno3)
+
+    // Tentando matricular o aluno1 novamente
+    formacaoKotlin.matricular(aluno1)
+
+    // Listando alunos matriculados
+    formacaoKotlin.listarInscritos()
+
+    // Listando conteúdos da formação
+    formacaoKotlin.listarConteudos()
+}
+
